@@ -32,17 +32,15 @@ pub fn part_two(input: &str) -> Option<u64> {
         let (turn, steps) = line.split_at(1);
         let steps: i32 = steps.parse().unwrap();
 
-        let step = match turn {
-            "L" => -1,
-            "R" => 1,
-            _ => panic!("huh?"),
-        };
-        for _ in 0..steps {
-            dial += step;
-            // if click zero, increment res
-            dial = dial.rem_euclid(100);
-            res += (dial == 0) as u64;
+        if turn == "R" {
+            dial += steps;
+            res += (dial).div_euclid(100) as u64;
+        } else {
+            let reversed = (100 - dial).rem_euclid(100);
+            res += ((reversed + steps).div_euclid(100)) as u64;
+            dial -= steps;
         }
+        dial = (dial).rem_euclid(100);
 
     }
     return Some(res);
