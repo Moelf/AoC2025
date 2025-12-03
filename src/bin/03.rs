@@ -3,22 +3,20 @@ advent_of_code::solution!(3);
 fn shared_impl(input: &str, rounds: usize) -> Option<u64> {
     let mut total = 0;
     for line in input.lines() {
-        let digits: Vec<u32> = line
-            .chars()
-            .map(|c| c.to_digit(10).unwrap())
-            .collect();
+        let digits: Vec<u32> = line.chars().map(|c| c.to_digit(10).unwrap()).collect();
         let mut idx = 0;
         for i in 1..=rounds {
             let mut temp_max = digits[idx];
             let reserve_digits = rounds - i;
-            for i in idx..digits.len()-reserve_digits {
+            let ra = idx..digits.len() - reserve_digits;
+            for i in ra {
                 if digits[i] > temp_max {
                     idx = i;
                     temp_max = digits[i];
                 }
             }
             idx += 1;
-            total += temp_max as u64 * u64::pow(10, (rounds - i) as u32);
+            total += temp_max as u64 * 10_u64.pow((rounds - i) as u32);
         }
     }
     Some(total)
