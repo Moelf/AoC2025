@@ -1,6 +1,6 @@
 advent_of_code::solution!(2);
 
-pub fn part_one(input: &str) -> Option<u64> {
+fn _solve(input: &str, one_shot: bool) -> Option<u64> {
     let ranges: Vec<&str> = input.trim().split(',').collect();
     let mut res: u64 = 0;
     for r in ranges {
@@ -10,29 +10,16 @@ pub fn part_one(input: &str) -> Option<u64> {
         for n in start..=end {
             let s = n.to_string();
             let len = s.len();
-            if len.is_multiple_of(2) {
-                let half = len / 2;
-                if s[..half] == s[half..] {
-                    res += n;
-                }
+            if one_shot && !len.is_multiple_of(2) {
+                continue;
             }
-        }
-    }
-    Some(res)
-}
-
-pub fn part_two(input: &str) -> Option<u64> {
-    let ranges: Vec<&str> = input.trim().split(',').collect();
-    let mut res: u64 = 0;
-    for r in ranges {
-        let (start, end) = r.split_once('-').unwrap();
-        let start: u64 = start.parse().unwrap();
-        let end: u64 = end.parse().unwrap();
-        for n in start..=end {
-            let s = n.to_string();
-            let len = s.len();
             let max_pattern_len = len / 2;
-            for pattern_len in 1..=max_pattern_len {
+            let range = if one_shot {
+                max_pattern_len..=max_pattern_len
+            } else {
+                1..=max_pattern_len
+            };
+            for pattern_len in range{
                 if len.is_multiple_of(pattern_len)
                     && s == s[0..pattern_len].repeat(len / pattern_len)
                 {
@@ -43,6 +30,13 @@ pub fn part_two(input: &str) -> Option<u64> {
         }
     }
     Some(res)
+}
+pub fn part_one(input: &str) -> Option<u64> {
+    _solve(input, true)
+}
+
+pub fn part_two(input: &str) -> Option<u64> {
+    _solve(input, false)
 }
 
 #[cfg(test)]
