@@ -1,6 +1,6 @@
 advent_of_code::solution!(10);
 
-use z3::{Config, Context, Optimize, SatResult, ast::Int};
+use z3::{Optimize, SatResult, ast::Int};
 
 fn press_button(target: &mut [bool], button: &Vec<usize>) {
     for &index in button {
